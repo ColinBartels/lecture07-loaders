@@ -1,7 +1,9 @@
 package edu.uw.loaderdemo;
 
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.UserDictionary;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +38,13 @@ public class WordListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_word_list, container, false);
+
+        String[] projection = { UserDictionary.Words.WORD, UserDictionary.Words._ID };
+        Cursor cursor = getActivity().getContentResolver().query(
+                UserDictionary.Words.CONTENT_URI, projection, null, null, null);
+        cursor.moveToFirst();
+        String word = cursor.getString(0);
+        Log.v(TAG, word);
 
         //model
         String[] data = {"Dog","Cat","Android","Inconceivable"};

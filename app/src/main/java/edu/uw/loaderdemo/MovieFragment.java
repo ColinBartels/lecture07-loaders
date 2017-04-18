@@ -12,6 +12,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -83,6 +93,32 @@ public class MovieFragment extends Fragment {
             return; //break
         }
 
-        //TODO: send request for data from url
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        Request movieRequest = new JsonObjectRequest(Request.Method.GET, urlString, null,
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        Log.v(TAG, response.toString());
+                        String posterUrl = response.getString("Poster");
+                        fetchMoviePoster(posterUrl);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }
+        );
+
+        queue.add(movieRequest);
+    }
+
+    public void fetchMoviePoster(String posterUrl) {
+        
     }
 }
